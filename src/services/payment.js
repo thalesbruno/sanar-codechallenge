@@ -15,7 +15,7 @@ module.exports = {
         name,
         email
       })
-      console.log(response.data)
+      //console.log(response.data)
       return response.data
     } catch(err) {
       console.error(err)
@@ -25,7 +25,7 @@ module.exports = {
   
   async createCard(customer_id, number, holder_name, exp_month, exp_year, cvv) {
     try {
-      const response = await paymentAPI.post(`/custormers/${customer_id}/cards`, {
+      const response = await paymentAPI.post(`/customers/${customer_id}/cards`, {
         number,
         holder_name,
         exp_month,

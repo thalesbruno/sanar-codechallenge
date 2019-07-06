@@ -15,6 +15,6 @@ const ClienteSchema = new mongoose.Schema({
     required: [true, 'Não pode ficar em branco'],
     match: [/\S+@\S+\.\S+/, 'e-mail inválido']
   }
-}, {timestamps: true})
+}, {timestamps: true});
 
-mongoose.model('Cliente', ClienteSchema)
+mongoose.model('Cliente', ClienteSchema);
