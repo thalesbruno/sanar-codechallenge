@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const CartaoSchema = new mongoose.Schema({
+  cartao_id: {
+    type: String,
+    required: [true, 'Não pode ficar em branco']
+  },
   numero: {
     type: String,
     minlength: 13,
@@ -22,7 +26,12 @@ const CartaoSchema = new mongoose.Schema({
     type: String,
     minlength: 3,
     maxlength: 4
+  },
+  cliente_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Cliente',
+    required: [true, 'Usuário não informado']
   }
-})
+}, { timestamps: true })
 
 mongoose.model('Cartao', CartaoSchema)

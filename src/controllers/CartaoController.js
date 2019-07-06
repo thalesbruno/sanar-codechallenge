@@ -9,5 +9,13 @@ module.exports = {
     } catch(err) {
       return res.json({ erro: err })
     }
+  },
+  async store(req, res) {
+    try {
+      const cartao = await Cartao.create(req.body)
+      return res.json(cartao)
+    } catch(err) {
+      return res.json({ erro: err })
+    }
   }
 }

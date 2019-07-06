@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const ClienteSchema = new mongoose.Schema({
+  cliente_id: {
+    type: String,
+    required: [true, 'Não pode ficar em branco']
+  },
   nome: {
     type: String,
     required: [true, 'Não pode ficar em branco']
