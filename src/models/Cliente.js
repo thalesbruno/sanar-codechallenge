@@ -28,6 +28,10 @@ const ClienteSchema = new mongoose.Schema({
   assinatura_id: {
     type: String
   },
+  assinatura_ativa: {
+    type: Boolean,
+    default: true
+  },
   plano_id: {
     type: String
   },

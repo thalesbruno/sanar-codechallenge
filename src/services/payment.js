@@ -51,7 +51,16 @@ module.exports = {
       console.log(response.data)
       return response.data
     } catch (err) {
-      console.error('erro ao criar assinatura', err)
+      console.error('Erro ao criar assinatura', err)
+      return err
+    }
+  },
+
+  async removeSubscription(subscription_id) {
+    try {
+      const response = await paymentAPI.delete(`/subscriptions/${subscription_id}`)
+      return response
+    } catch (err) {
       return err
     }
   }
