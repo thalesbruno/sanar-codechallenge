@@ -3,7 +3,7 @@ const payment = require('../services/payment')
 const Cliente = mongoose.model('Cliente')
 
 module.exports = {
-  async index(req, res) {
+  async list(req, res) {
     try {
       const clientes = await Cliente.find({}, {_id: 0, nome: 1, email: 1})
       return res.json(clientes)
@@ -36,7 +36,7 @@ module.exports = {
       const { id:cartao_id, last_four_digits, brand } = cartao
       const { id:assinatura_id, plan: { name: plano_nome }} = assinatura
       const cliente = await Cliente.create({
-        cliente_id, nome, email, cartao_id, last_four_digits, brand, assinatura_id, plano_id, plano_nome
+        cliente_id, nome, email, cartao_id, last_four_digits, brand, assinatura_id, assinatura_ativa:true, plano_id, plano_nome
       })
       
       return res.json({ cliente, cartao, assinatura }) // *** to do: marcarar numero do cartao na resposta
@@ -44,5 +44,17 @@ module.exports = {
       return res.json({ erro: err })
     }
     
+  },
+
+  async unsubscribe(req, res) {
+    try {
+      const { cliente_id } = req.params
+      const { assinatura_id, _id } = await Cliente.findOne({cliente_id})
+      await payment.removeSubscription(assinatura_id)
+      const cliente = await Cliente.findByIdAndUpdate({_id}, req.body, { new: true })
+      return res.json(cliente)
+    } catch (err) {
+      return `Erro ao tentar cancelar assinatura do cliente: ${err}`
+    }
   }
 }
