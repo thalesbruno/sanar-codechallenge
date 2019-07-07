@@ -18,15 +18,12 @@ module.exports = {
       const { nome, email } = req.body.cliente
       const { id:cliente_id } = await payment.createCustomer(nome, email)
 
-      // create cliente
-      const cliente = await Cliente.create({cliente_id, nome, email})
-
       // create payment api customer card
       const { numero, expiracao_mes, expiracao_ano, cvv } = req.body.cartao
       const cartao = await payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
       cartao["number"] = numero
 
-      // create payment api plan
+      // create payment api customer subscription
       const { plano_id } = req.body.produtos[0]
       let assinatura = {}
       try {
@@ -34,6 +31,13 @@ module.exports = {
       } catch (err) {
         return err
       }
+
+      // persist cliente data
+      const { id:cartao_id, last_four_digits, brand } = cartao
+      const { id:assinatura_id, plan: { name: plano_nome }} = assinatura
+      const cliente = await Cliente.create({
+        cliente_id, nome, email, cartao_id, last_four_digits, brand, assinatura_id, plano_id, plano_nome
+      })
       
       return res.json({ cliente, cartao, assinatura }) // *** to do: marcarar numero do cartao na resposta
     } catch(err) {
