@@ -18,7 +18,7 @@ module.exports = {
       //console.log(response.data)
       return response.data
     } catch(err) {
-      console.error(err)
+      console.error('erro ao criar cliente', err)
       return err
     }
   },
@@ -35,7 +35,23 @@ module.exports = {
       console.log(response.data)
       return response.data
     } catch(err) {
-      console.error(err)
+      console.error('erro ao criar cartao', err)
+      return err
+    }
+  },
+
+  async createSubscription(plan_id, customer_id, card) {
+    try {
+      const response = await paymentAPI.post('/subscriptions', {
+        plan_id,
+        payment_method: 'credit_card',
+        customer_id,
+        card
+      })
+      console.log(response.data)
+      return response.data
+    } catch (err) {
+      console.error('erro ao criar assinatura', err)
       return err
     }
   }
