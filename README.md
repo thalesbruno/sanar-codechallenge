@@ -70,9 +70,9 @@ Sanarflix - Promoção - Mensal + Livro Yellowbook: plan_BMo02rNsMPFW0dGe
 
 Caso 1
 ------
-_Mario é um novo cliente que acabou de assinar o Sanarflix_
+>_Mario é um novo cliente que acabou de assinar o Sanarflix_
 
->`POST` /clientes  
+`POST` /clientes  
 
 Body:
 ```json
@@ -99,9 +99,9 @@ Body:
 
 Caso 2
 ------
-_Juliana assinou para testar o Sanarflix por 7 dias grátis, antes da primeira cobrança_
+>_Juliana assinou para testar o Sanarflix por 7 dias grátis, antes da primeira cobrança_
 
->`POST` /clientes
+`POST` /clientes
 
 Body:
 ```json
@@ -128,9 +128,9 @@ Body:
 
 Caso 3
 ------
-_Pedro assinou o Sanarflix Trimestral, por R$69,90_
+>_Pedro assinou o Sanarflix Trimestral, por R$69,90_
 
->`POST` /clientes
+`POST` /clientes
 
 Body:
 ```json
@@ -157,10 +157,10 @@ Body:
 
 Caso 4
 ------
-_Marcos teve um problema com o cartão de crédito e gostaria de alterar o cartão para
+>_Marcos teve um problema com o cartão de crédito e gostaria de alterar o cartão para
 a próxima cobrança_
 
->`PUT` /clientes/:_id/cartao
+`PUT` /clientes/:_id/cartao
 
 Body:
 ```json
@@ -179,10 +179,10 @@ Body:
 
 Caso 5
 ------
-_Luiz fez a assinatura na promoção do Sanarflix + Livro Yellowbook, por um valor de
+>_Luiz fez a assinatura na promoção do Sanarflix + Livro Yellowbook, por um valor de
 R$164,40 no primeiro mês e depois a assinatura normal de R$24,50_
 
->`POST` /clientes
+`POST` /clientes
 
 Body:
 ```json
@@ -210,9 +210,9 @@ Body:
 
 Caso 6
 ------
-_Ricardo quer cancelar a assinatura do Sanarflix_
+>_Ricardo quer cancelar a assinatura do Sanarflix_
 
->`PUT` /clientes/:_id
+`PUT` /clientes/:_id
 
 Body:
 ```json
