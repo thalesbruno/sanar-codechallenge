@@ -22,7 +22,7 @@ Pré-requisitos:
 - [Node](https://nodejs.org/en/download/)
 - [Mongodb](https://www.mongodb.com/what-is-mongodb)
 
-Para executar o projeto, primeiramente é preciso clonar o repositório para a máquinda local:
+Para executar o projeto, primeiramente é preciso clonar o repositório para a máquina local:
 ```bash
 git clone https://github.com/thalesbruno/sanar-codechallenge
 ```
@@ -30,14 +30,19 @@ Em seguida, na raiz do diretório criado, deve-se executar a instalação das de
 ```bash
 npm install
 ```
-Também será necessária a instalação do MongoDB para criação da base de dados do projeto. Após instalado, rodamos o sistema de banco de dados passando um diretório para guarda dos arquivos gerados:
+Também será necessária a instalação do MongoDB para criação da base de dados do projeto. Após instalado, subimos o serviço do banco de dados, passando um diretório onde serão persistido os dados gerados (no exemplo `/home/usuario/data`):
 ```bash
 mongod --dbpath=/home/usuario/data
 ```
 Se tudo der certo, o banco estará rodando e aguardando conexões na porta 27017 na rede localhost  
 `[initandlisten] waiting for connections on port 27017`
 
-Com isso, a infraestrutura de execução do projeto estará pronta.
+Uma opção também é subir o MongoDB com o docker:
+```bash
+docker run -d -p 27017:27017 -v /home/usuario/data:/data/db mongo
+```
+
+Com isso, a infraestrutura para execução do projeto estará pronta.
 
 API
 ===
