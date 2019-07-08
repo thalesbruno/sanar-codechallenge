@@ -205,6 +205,7 @@ Body:
 
 Caso 6
 ------
+_Ricardo quer cancelar a assinatura do Sanarflix_
 
 >`PUT` /clientes/:_id
 
