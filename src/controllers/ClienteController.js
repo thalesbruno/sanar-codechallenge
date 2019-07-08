@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
-const payment = require('../services/payment')
+const Payment = require('../services/Payment')
 const Cliente = mongoose.model('Cliente')
 
-module.exports = {
+class ClienteController {
+
   async list(req, res) {
     try {
       const clientes = await Cliente.find({})
@@ -10,24 +11,24 @@ module.exports = {
     } catch(err) {
       return res.json({ erro: err })
     }
-  },
+  }
 
   async subscribe(req, res) {
     try {
-      // create payment api customer
+      // create Payment api customer
       const { nome, email } = req.body.cliente
-      const { id:cliente_id } = await payment.createCustomer(nome, email)
+      const { id:cliente_id } = await Payment.createCustomer(nome, email)
 
-      // create payment api customer card
+      // create Payment api customer card
       const { numero, expiracao_mes, expiracao_ano, cvv } = req.body.cartao
-      const cartao = await payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      const cartao = await Payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
       cartao["number"] = numero
 
-      // create payment api customer subscription
+      // create Payment api customer subscription
       const { plano_id } = req.body.produtos[0]
       let assinatura = {}
       try {
-        assinatura = await payment.createSubscription(plano_id, cliente_id, cartao)
+        assinatura = await Payment.createSubscription(plano_id, cliente_id, cartao)
       } catch (err) {
         return err
       }
@@ -44,34 +45,36 @@ module.exports = {
       return res.json({ erro: err })
     }
     
-  },
+  }
 
   async unsubscribe(req, res) {
     try {
       const { _id } = req.params
       const { assinatura_id } = await Cliente.findById({_id})
-      await payment.removeSubscription(assinatura_id)
+      await Payment.removeSubscription(assinatura_id)
       const cliente = await Cliente.findByIdAndUpdate({_id}, req.body, { new: true })
       return res.json(cliente)
     } catch (err) {
       return `Erro ao tentar cancelar assinatura do cliente: ${err}`
     }
-  },
+  }
 
-  async update_card(req, res) {
+  async changeCard(req, res) {
     try {
       const { _id } = req.params
-      console.log(_id)
       const { cliente_id } = req.body
       const { numero, nome, expiracao_mes, expiracao_ano, cvv } = req.body.cartao
-      const cartao = await payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      const cartao = await Payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
       const { id:cartao_id, last_four_digits:cartao_ultimos_quatro_digitos, brand:cartao_bandeira } = cartao
       const cliente = await Cliente.findByIdAndUpdate({_id}, {cartao_id, cartao_ultimos_quatro_digitos, cartao_bandeira}, { new: true })
       const { assinatura_id } = cliente
-      await payment.updateCard(assinatura_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
-      return res.json(cliente)
+      console.log(assinatura_id, cartao_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      const card = await Payment.updateCard(assinatura_id, cartao_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      return res.json({cliente, card})
     } catch (err) {
       return `Erro ao tentar atualizar o cartao do cliente: ${err}`
     }
   }
 }
+
+module.exports = new ClienteController()
