@@ -5,7 +5,7 @@ const Cliente = mongoose.model('Cliente')
 module.exports = {
   async list(req, res) {
     try {
-      const clientes = await Cliente.find({}, {_id: 0, nome: 1, email: 1})
+      const clientes = await Cliente.find({})
       return res.json(clientes)
     } catch(err) {
       return res.json({ erro: err })
