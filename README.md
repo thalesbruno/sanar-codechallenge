@@ -152,6 +152,24 @@ Body:
 
 Caso 4
 ------
+_Marcos teve um problema com o cartão de crédito e gostaria de alterar o cartão para
+a próxima cobrança_
+
+>`PUT` /clientes/:_id/cartao
+
+Body:
+```json
+{
+	"cliente_id": "cus_xxxx",
+	"cartao": {
+		"numero": "5425019448107793",
+		"nome": "Marcos Gomes",
+		"expiracao_mes": 1,
+		"expiracao_ano": 2020,
+		"cvv": "351"
+	}
+}
+```
 
 
 Caso 5
@@ -188,7 +206,7 @@ Body:
 Caso 6
 ------
 
->`PUT` /clientes/cus_xxxxx
+>`PUT` /clientes/:_id
 
 Body:
 ```json
