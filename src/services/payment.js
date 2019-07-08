@@ -40,6 +40,23 @@ module.exports = {
     }
   },
 
+  async updateCard(subscription_id, number, holder_name, exp_month, exp_year, cvv) {
+    try {
+      const response = await paymentAPI.patch(`/subscriptions/${subscription_id}/card`, {
+        number,
+        holder_name,
+        exp_month,
+        exp_year,
+        cvv
+      })
+      console.log(response.data)
+      return response.data
+    } catch(err) {
+      console.error(`erro ao atualizar cartao na plataforma de pagamento: ${err}`)
+      return err
+    }
+  },
+
   async createSubscription(plan_id, customer_id, card) {
     try {
       const response = await paymentAPI.post('/subscriptions', {

@@ -33,10 +33,10 @@ module.exports = {
       }
 
       // persist cliente data
-      const { id:cartao_id, last_four_digits, brand } = cartao
+      const { id:cartao_id, last_four_digits:cartao_ultimos_quatro_digitos, brand:cartao_bandeira } = cartao
       const { id:assinatura_id, plan: { name: plano_nome }} = assinatura
       const cliente = await Cliente.create({
-        cliente_id, nome, email, cartao_id, last_four_digits, brand, assinatura_id, assinatura_ativa:true, plano_id, plano_nome
+        cliente_id, nome, email, cartao_id, cartao_ultimos_quatro_digitos, cartao_bandeira, assinatura_id, assinatura_ativa:true, plano_id, plano_nome
       })
       
       return res.json({ cliente, cartao, assinatura }) // *** to do: marcarar numero do cartao na resposta
@@ -48,13 +48,30 @@ module.exports = {
 
   async unsubscribe(req, res) {
     try {
-      const { cliente_id } = req.params
-      const { assinatura_id, _id } = await Cliente.findOne({cliente_id})
+      const { _id } = req.params
+      const { assinatura_id } = await Cliente.findById({_id})
       await payment.removeSubscription(assinatura_id)
       const cliente = await Cliente.findByIdAndUpdate({_id}, req.body, { new: true })
       return res.json(cliente)
     } catch (err) {
       return `Erro ao tentar cancelar assinatura do cliente: ${err}`
+    }
+  },
+
+  async update_card(req, res) {
+    try {
+      const { _id } = req.params
+      console.log(_id)
+      const { cliente_id } = req.body
+      const { numero, nome, expiracao_mes, expiracao_ano, cvv } = req.body.cartao
+      const cartao = await payment.createCard(cliente_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      const { id:cartao_id, last_four_digits:cartao_ultimos_quatro_digitos, brand:cartao_bandeira } = cartao
+      const cliente = await Cliente.findByIdAndUpdate({_id}, {cartao_id, cartao_ultimos_quatro_digitos, cartao_bandeira}, { new: true })
+      const { assinatura_id } = cliente
+      await payment.updateCard(assinatura_id, numero, nome, expiracao_mes, expiracao_ano, cvv)
+      return res.json(cliente)
+    } catch (err) {
+      return `Erro ao tentar atualizar o cartao do cliente: ${err}`
     }
   }
 }
